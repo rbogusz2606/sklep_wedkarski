@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+{% load static %}
+  <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>Sklep Wedkarski</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/product/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link href={% static "css/bootstrap.min.css" %} rel="stylesheet">
+    <link href={% static "css/home.css" %} rel="stylesheet">
+
+  </head>
+  <body>
+
+    {% include "docs/header.html" %}
+    <main class="d-flex flex-column min-vh-100">
+      <div class="container-fluid flex-grow-1 d-flex">
+        <div class="row flex-grow-1 w-100">
+          <div class="col-md-6 position-relative d-flex align-items-center justify-content-center text-center overflow-hidden bg-wedki">
+            <div class="overlay"></div>
+            <div class="content position-relative">
+                <a href="{% url 'wedki' %}" class="no-underline">
+                    <h2 class="display-5">Wędki</h2>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6 position-relative d-flex align-items-center justify-content-center text-center overflow-hidden bg-kolowrotki">
+          <div class="overlay"></div>
+          <div class="content position-relative">
+              <a href="{% url 'kolowrotki' %}" class="no-underline">
+                  <h2 class="display-5">Kołowrotki</h2>
+              </a>
+          </div>
+      </div>
+      </div>
+    </main>
+    
+
+    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+
+  </body>
+</html>

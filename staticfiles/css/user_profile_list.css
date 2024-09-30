@@ -1,0 +1,75 @@
+/* Styl dla kontenera */
+.profile-section .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #333;  /* Czarne obramowanie */
+    border-radius: 8px;
+    background-color: #f0f0f0;  /* Jasne tło */
+    font-family: Arial, sans-serif;
+}
+
+/* Nagłówek */
+.profile-section .container h1 {
+    font-size: 26px;
+    color: #222;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+/* Lista profili */
+.profile-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-section ul li {
+    padding: 12px 15px;
+    font-size: 18px;
+    border: 1px solid #222; /* Czarne obramowanie dla elementów listy */
+    margin: 6px 0;
+    background-color: #fff;  /* Białe tło */
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-section ul li:nth-child(odd) {
+    background-color: #f9f9f9;  /* Alternatywne tło dla co drugiego elementu */
+}
+
+/* Linki do edycji i usuwania */
+.profile-section a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid #333; /* Czarne obramowanie przycisków */
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Kolory przycisków */
+.profile-section a.edit-btn {
+    background-color: #e0e0e0;
+}
+
+.profile-section a.delete-btn {
+    background-color: #ffcccc;
+}
+
+/* Efekt po najechaniu na linki */
+.profile-section a:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* Styl dla pustego stanu */
+.profile-section p {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}

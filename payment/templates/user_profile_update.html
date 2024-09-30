@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj profil użytkownika</title>
+    <link rel="stylesheet" href="{% static 'css/update-profile.css' %}">
+</head>
+<body>
+    <div class="update-profile-container">
+        <h1>Edytuj profil użytkownika</h1>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+    
+            <button type="submit">Zapisz zmiany</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</body>
+</html>

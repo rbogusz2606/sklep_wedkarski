@@ -1,0 +1,44 @@
+{% load static %}
+{% load custom_filters %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsumowanie zamówienia</title>
+    <link rel="stylesheet" href="{% static 'css/order_summary.css' %}">
+    
+</head>
+<body>
+    <h1>Historia Zamówień</h1>
+    {% if orders %}
+        {% for order in orders %}
+            <h2>Zamówienie nr {{ order.order_number }} - {{ order.created_at }}</h2>
+            <p><strong>Status płatności:</strong> {{ order.get_payment_status_display }}</p>
+            <p><strong>Łączna kwota:</strong> {{ order.total_amount }} PLN</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produkt</th>
+                        <th>Ilość</th>
+                        <th>Cena jednostkowa</th>
+                        <th>Łącznie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price }} PLN</td>
+                            <td>{{ item.quantity|multiply:item.price }} PLN</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>Nie masz jeszcze żadnych zamówień.</p>
+    {% endif %}
+    
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj profil użytkownika</title>
+</head>
+<body>
+    {% include "docs/header.html" %}
+    <div class="container">
+        <h1>Dodaj profil użytkownika</h1>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}  
+
+            <button type="submit">Zapisz profil</button>
+        </form>
+
+        
+    </div>
+</body>
+</html>

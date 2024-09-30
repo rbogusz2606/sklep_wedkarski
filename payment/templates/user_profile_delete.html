@@ -1,0 +1,18 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static "css/delete_profile.css" %}">
+</head>
+
+<body>
+    <div class="delete-profile-container">
+        <h1>Usunąć profil: {{ object.full_name }} ?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <p>Czy jesteś pewny, ze chcesz usunąć profil?</p>
+            <button type="submit">Usuń</button>
+            <a href="{% url 'profile-list' %}">Wróć</a>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</body>
+

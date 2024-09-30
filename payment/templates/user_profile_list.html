@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista profili użytkowników</title>
+    <link rel="stylesheet" href="{% static "css/user_profile_list.css" %}">
+</head>
+<body>
+    {% include "docs/header.html" %}
+        <div class="profile-section">
+            <div class="container">
+                <h1 class="container text-center">Dane użytkownika: {{request.user}}</h1>
+        
+                {% if profiles %}
+                    <ul class="container text-center">
+                        {% for profile in profiles %}
+                            <li><span>{{ profile.full_name }}</span></li>
+                            <li><span>{{ profile.email }}</span></li>
+                            <li><span>{{ profile.adress }}</span></li>
+                            <li><span>{{ profile.city }}</span></li>
+                            <li><span>{{ profile.country }}</span></li>
+                            <li><a href="{% url 'profile-edit' profile.pk %}" class="edit-btn">Edytuj</a>
+                            <li><a href="{% url 'profile-delete' profile.pk %}" class="delete-btn">Usuń</a>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Nie masz jeszcze żadnych profili. <a href="{% url 'add-user-profile' %}">Utwórz nowy profil</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+    
+</body>
+</html>

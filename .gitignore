@@ -1,0 +1,6 @@
+/env
+/db.sqlite3
+/venv
+/.env
+/db
+/db_backup.json

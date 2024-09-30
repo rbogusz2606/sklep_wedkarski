@@ -1,0 +1,5 @@
+#!C:\Users\Bogus\Desktop\sklep\venv\Scripts\python.exe
+
+from f90nml import cli
+
+cli.parse()

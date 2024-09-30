@@ -1,0 +1,64 @@
+.item-image {
+    height: 62px; /* Ustalona wysokość */
+    width: 62px; /* Ustalona szerokość */
+    object-fit: cover; /* Wypełnia kontener, zachowując proporcje */
+    border-radius: 5px; /* Zaokrąglenie rogów dla estetyki */
+    max-width: 100%; /* Responsywność, aby nie przekroczyć kontenera */
+}
+
+.wrapper {
+    height: 40px; /* Zwiększ wysokość dla lepszego wyśrodkowania */
+    min-width: 200px; /* Ustawienie minimalnej szerokości */
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; /* Rozdziel elementy */
+    background: #FFF; 
+    border-radius: 12px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Większy cień dla głębi */
+    padding: 0 10px; /* Wewnętrzne odstępy */
+}
+
+.wrapper span {
+    width: auto; /* Zmiana szerokości na auto */
+    text-align: center; 
+    font-size: 24px; /* Zmniejszenie czcionki dla lepszej czytelności */
+    font-weight: 600; 
+    cursor: pointer; 
+    user-select: none; 
+    color: #333; /* Zmiana koloru tekstu */
+    transition: color 0.3s; /* Płynna zmiana koloru tekstu */
+}
+
+.wrapper span:hover {
+    color: #007BFF; /* Zmiana koloru tekstu po najechaniu */
+}
+
+.wrapper span.num {
+    font-size: 18px; /* Dostosowanie rozmiaru czcionki dla lepszej proporcji */
+    border-right: 2px solid rgba(0, 0, 0, 0.2); 
+    border-left: 2px solid rgba(0, 0, 0, 0.2); 
+    pointer-events: none; 
+    padding: 0 10px; /* Wewnętrzne odstępy dla lepszej estetyki */
+}
+
+.payment-btn {
+    background-color: #28a745; /* Zielony kolor */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.payment-btn:hover {
+    background-color: #218838; /* Ciemniejszy zielony przy hover */
+    transform: translateY(-2px); /* Subtelny efekt podniesienia */
+}
+
+.payment-btn:active {
+    background-color: #1e7e34; /* Jeszcze ciemniejszy zielony przy kliknięciu */
+    transform: translateY(0); /* Resetowanie efektu podniesienia przy kliknięciu */
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static "css/cart.css" %}">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+
+        {% include "docs/header.html" %}
+
+        <h2 class="text-center">Twój Koszyk</h2>
+        
+        <div class="container text-center">
+            <div class="row">
+                <div class="col">
+                    <strong>Nazwa</strong>
+                </div>
+                <div class="col">
+                    <strong>Ilość</strong>
+                </div>
+                <div class="col">
+                    <strong>Cena</strong>
+                </div>
+            </div>
+        
+            {% for item in cart_products %}
+                <div class="row cart-item" data-product-id="{{ item.id }}">
+                    <div class="col">
+                        <img src="{{ item.img.url }}" class="item-image" alt="{{ item.name }}">
+                        {{ item.name }}
+                    </div>
+                    <div class="col">
+                        <div class="wrapper">
+                            <span class="minus">-</span>
+                            <span class="num quantity-cart">
+                                {% for key, value in quantities.items %}
+                                    {% if key == item.id|stringformat:"s" %}
+                                        {{ value }}
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="plus">+</span>
+                        </div>
+                        <button class="update-cart" data-index="{{ item.id }}">Zaktualizuj</button>
+                        <button class="remove-cart delete-product" data-index="{{ item.id }}">Usuń</button>
+                    </div>
+                    <div class="col">
+                      {% for key, value in quantities.items %}
+                        {% if key == item.id|stringformat:"s" %}
+                            {{ item.price|multiply:value|floatformat:2 }} zł
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                </div>
+                <br><br>
+            {% endfor %}
+            <div class="cart-total">
+                <strong>Łączna kwota: {{ totals|floatformat:2 }}</strong>
+            </div>
+            
+            <a href="{% url "order-summary" %}"><button class="payment-btn">Przejdź do podsumowania</button></a>
+
+            <script>
+                // Check if update-cart button pressed
+                $(document).on("click", ".update-cart", function(e){
+                    e.preventDefault();
+                    var productid = $(this).data('index');
+                    var quantity = parseInt($(this).closest('.row').find('.quantity-cart').text()); // Upewnij się, że to jest liczba
+                
+                    if (isNaN(quantity) || quantity <= 0) {
+                        alert("Ilość musi być większa niż 0.");
+                        return;
+                    }
+                
+                    $.ajax({
+                      type: "POST",
+                      url: "{% url 'cart_update' %}",
+                      data: {
+                        product_id: productid,
+                        product_qty: quantity,
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        action: "post",
+                      },
+                      success: function(json){
+                        alert(json.message); // Informacja o sukcesie
+                        location.reload(); // Odśwież koszyk po aktualizacji
+                      },
+                      error: function (xhr, errmsg, err) {
+                        alert('Błąd podczas aktualizacji produktu w koszyku.');
+                      },
+                    });
+                });
+              
+                // Increase quantity
+                $(document).on("click", ".plus", function() {
+                  var quantityElement = $(this).siblings('.quantity-cart'); // Znajdź element z ilością
+                  var currentQuantity = parseInt(quantityElement.text()); // Pobierz aktualną ilość
+                  quantityElement.text(currentQuantity + 1); // Zwiększ ilość o 1
+                });
+              
+                // Decrease quantity
+                $(document).on("click", ".minus", function() {
+                  var quantityElement = $(this).siblings('.quantity-cart'); // Znajdź element z ilością
+                  var currentQuantity = parseInt(quantityElement.text()); // Pobierz aktualną ilość
+                  if (currentQuantity > 1) { // Upewnij się, że ilość nie jest mniejsza niż 1
+                    quantityElement.text(currentQuantity - 1); // Zmniejsz ilość o 1
+                  }
+                });
+              
+                // Remove item from cart
+                $(document).on("click", ".delete-product", function(e){
+                  e.preventDefault();
+                  var productid = $(this).data('index');
+              
+                  $.ajax({
+                    type: "POST",
+                    url: "{% url 'cart_remove' %}", // Upewnij się, że to jest właściwa nazwa URL
+                    data: {
+                      product_id: productid,
+                      csrfmiddlewaretoken: "{{ csrf_token }}",
+                      action: "post",
+                    },
+                    success: function(json){
+                    alert("Produkt usunięty")
+                      location.reload(); // Odśwież stronę po usunięciu produktu
+                    },
+                    error: function (xhr, errmsg, err) {
+                      alert('Błąd podczas usuwania produktu z koszyka.');
+                    },
+                  });
+                });
+              </script>
+              <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+    </body>
+</html>

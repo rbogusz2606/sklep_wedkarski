@@ -1,0 +1,92 @@
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsumowanie zamówienia</title>
+    <link rel="stylesheet" href="{% static 'css/order_summary.css' %}">
+    
+</head>
+<body>
+    {% include "docs/header.html" %}
+    <main class="order-summary-page">
+        <div class="container">
+            <h1>Podsumowanie zamówienia</h1>
+
+            <!-- Dane użytkownika -->
+            <div class="user-info">
+                <h2>Dane użytkownika</h2>
+                {% if userprofile %}
+                    <p><strong>Imię i nazwisko:</strong> {{ userprofile.full_name }}</p>
+                    <p><strong>Email:</strong> {{ userprofile.email }}</p>
+                    <p><strong>Adres:</strong> {{ userprofile.adress }}</p>
+                    <p><strong>Miasto:</strong> {{ userprofile.city }}</p>
+                    <p><strong>Kraj:</strong> {{ userprofile.country }}</p>
+                {% else %}
+                    <p>Nie znaleziono danych użytkownika. <a href="{% url 'add-user-profile' %}">Utwórz profil</a>.</p>
+                {% endif %}
+            </div>
+
+            <!-- Podsumowanie koszyka -->
+            <div class="order-summary">
+                <h2>Twoje zamówienie</h2>
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Produkt</th>
+                            <th>Ilość</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_products %}
+                        <tr class="cart-item" data-product-id="{{ item.id }}">
+                            <td>
+                                <img src="{{ item.img.url }}" class="item-image" alt="{{ item.name }}">
+                                {{ item.name }}
+                            </td>
+                            <td>
+                                {% for key, value in quantities.items %}
+                                    {% if key == item.id|stringformat:"s" %}
+                                        {{ value }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for key, value in quantities.items %}
+                                    {% if key == item.id|stringformat:"s" %}
+                                        {{ item.price}} zł
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Podsumowanie cen -->
+            <div class="total-summary">
+                <h3>Podsumowanie kwoty</h3>
+                <p><strong>Łącznie do zapłaty:</strong> {{ totals }} zł</p>
+            </div>
+
+            <!-- Formularz płatności -->
+            <form id="payment-form" method="post" action="{% url 'create_checkout_session' %}">
+                {% csrf_token %}
+                
+                <!-- Przyciski płatności bez potrzeby elementu karty -->
+                {% if userprofile %}
+                    <button class="payment-btn" type="submit">Zamawiam i płacę</button>
+                {% else %}
+                    <p>Uzupełnij swój <a href="{% url "add-user-profile" %}">profil</a>, abyśmy wiedzieli na jaki adres wysłać zamówienie</p>
+                {% endif %}
+            </form>
+            </form>
+        </div>
+    </main>
+
+    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+    
+</body>
+</html>

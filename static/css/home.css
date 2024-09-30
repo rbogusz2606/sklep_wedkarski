@@ -1,0 +1,29 @@
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+}
+
+.bg-wedki {
+  background-image: url('../images/wedki.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-kolowrotki {
+  background-image: url('../images/kolowrotki.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Półprzezroczysta czarna nakładka */
+}
+
+.display-5{
+  color: white;
+}

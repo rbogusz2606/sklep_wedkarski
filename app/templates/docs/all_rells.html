@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static "css/rells.css" %}">
+    </head>
+    <body>
+
+        {% include "docs/header.html" %}
+        <ul class="container text-center">
+            <div class="row">
+                <div class="col">
+                    {% for object in rells_filter %}
+                        <li class="rells-item">
+                            <div class="image-container">
+                                <a href="{% url "product-detail" pk=object.id %}"><img src="{{ object.img.url }}"></a>
+                            </div>
+                            <div class="details">
+                                <p>Nazwa: <a href="{% url "product-detail" pk=object.id %}">{{ object.name }}</a></p>
+                                <p>Rodzaj: {{ object.type }}</p>
+                                <p>Kategoria: {{ object.category }}</p>
+                                <h2>Cena: {{ object.price }} zł</h2>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </ul>
+        <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+    </body>
+</html>

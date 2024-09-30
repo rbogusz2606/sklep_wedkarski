@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static "css/rods.css" %}">
+        <link rel="stylesheet" href="{% static "css/quantity.css" %}">
+    </head>
+    <body>
+        {% include "docs/header.html" %}
+        <main>
+            <ul class="container text-center">
+                <li><img src="{{ product.img.url }}" alt="{{ product.name }}" class="img-fluid w-50"></li>
+                <li><h2>Nazwa produktu:</h2>{{product.name}}</li>
+                <li><h2>Opis produktu:</h2> {{product.description}} </li>
+                <li>Cena: {{product.price}} zł</li>
+                <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="action" value="post">
+                {% if user.is_authenticated %}
+                    <div class="wrapper">
+                        <span class="minus">-</span>
+                        <span class="num" id="quantity-product-detail">1</span>
+                        <span class="plus">+</span>
+                    </div>
+                    <button type="button" id="add-cart" value ="{{product.id}}" class="btn btn-warning">Dodaj do koszyka</button>
+                {% endif %}
+            </ul>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script>
+            $(document).on("click", "#add-cart", function(e){
+                e.preventDefault();
+        
+                // Pobierz ilość produktu
+                let productQuantity = parseInt($('#quantity-product-detail').text(), 10);
+                let cartQuantity = parseInt($('#quantity-cart').text(), 10);
+                
+                // Jeśli cartQuantity jest NaN, ustaw domyślną wartość, np. 0 lub 1
+                if (isNaN(cartQuantity)) {
+                    cartQuantity = 1; // lub 1, w zależności od potrzeb
+                }
+        
+                // Walidacja, aby upewnić się, że productQuantity to liczba
+                if (isNaN(productQuantity)) {
+                    alert("Nieprawidłowa ilość. Proszę upewnić się, że wprowadzono liczbę.");
+                    return;
+                }
+                console.log("Product Quantity:", productQuantity);
+                console.log("Cart Quantity:", cartQuantity);
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "cart_add" %}',
+                    data: {
+                        product_id: $("#add-cart").val(),
+                        product_quantity: productQuantity, 
+                        cart_quantity: cartQuantity,
+                        csrfmiddlewaretoken: "{{csrf_token}}",
+                        action: 'post',
+                    },
+        
+                    success: function(json){
+                        document.getElementById("cart_quantity").textContent = json.cart_quantity;
+                        document.getElementById("quantity-product-detail").textContent = json.product_quantity;
+                        alert("Dodano produkt do koszyka");
+                    },
+        
+                    error: function(xhr, errmsg, err){
+                        alert('Błąd podczas dodawania produktu do koszyka.');
+                    },
+                });
+            });
+        </script>
+        
+        <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+        <script src={% static "js/quantity.js" %}></script>
+    </body>
+</html>

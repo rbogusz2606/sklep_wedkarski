@@ -1,0 +1,202 @@
+.order-summary-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.order-summary-page body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.order-summary-page .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.order-summary-page h1, 
+.order-summary-page h2, 
+.order-summary-page h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.order-summary-page h1 {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.order-summary-page h2 {
+    font-size: 24px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.order-summary-page h3 {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.order-summary-page p {
+    margin: 10px 0;
+}
+
+.order-summary-page strong {
+    font-weight: bold;
+}
+
+.order-summary-page .user-info, 
+.order-summary-page .order-summary, 
+.order-summary-page .total-summary, 
+.order-summary-page .payment-options {
+    margin-bottom: 30px;
+}
+
+.order-summary-page .cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.order-summary-page .cart-table th, 
+.order-summary-page .cart-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-summary-page .cart-table th {
+    background-color: #f2f2f2;
+    font-size: 16px;
+}
+
+.order-summary-page .cart-table td {
+    font-size: 15px;
+}
+
+.order-summary-page .cart-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.order-summary-page .total-summary p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.order-summary-page .total-summary {
+    text-align: right;
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+}
+
+.order-summary-page .payment-options h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.order-summary-page .payment-options button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.order-summary-page .payment-options button:hover {
+    background-color: #218838;
+}
+
+/* Styl na mniejsze ekrany */
+@media (max-width: 768px) {
+    .order-summary-page .container {
+        padding: 10px;
+    }
+
+    .order-summary-page h1 {
+        font-size: 28px;
+    }
+
+    .order-summary-page h2 {
+        font-size: 20px;
+    }
+
+    .order-summary-page h3 {
+        font-size: 18px;
+    }
+
+    .order-summary-page .cart-table th, 
+    .order-summary-page .cart-table td {
+        padding: 8px;
+    }
+}
+
+/* Stylizowanie obrazów produktów w tabeli koszyka */
+.order-summary-page .cart-table img.item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.order-summary-page .cart-table td {
+    vertical-align: middle;
+    padding: 15px;
+}
+
+.order-summary-page .cart-item td:first-child {
+    display: flex;
+    align-items: center;
+}
+
+.order-summary-page .cart-item td:first-child img {
+    margin-right: 15px;
+}
+
+.order-summary-page .cart-item td {
+    font-size: 16px;
+}
+
+/* Styl na mniejsze ekrany */
+@media (max-width: 768px) {
+    .order-summary-page .cart-table img.item-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .order-summary-page .cart-item td {
+        font-size: 14px;
+    }
+}
+.payment-btn {
+    background-color: #28a745; /* Zielony kolor */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.payment-btn:hover {
+    background-color: #218838; /* Ciemniejszy zielony przy hover */
+    transform: translateY(-2px); /* Subtelny efekt podniesienia */
+}
+
+.payment-btn:active {
+    background-color: #1e7e34; /* Jeszcze ciemniejszy zielony przy kliknięciu */
+    transform: translateY(0); /* Resetowanie efektu podniesienia przy kliknięciu */
+}
