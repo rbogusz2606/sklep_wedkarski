@@ -16,3 +16,5 @@ urlpatterns = [
     path('webhook-stripe/', views.stripe_webhook, name='webhook-stripe'),
     path('order-history/', views.order_history, name='order-history'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
