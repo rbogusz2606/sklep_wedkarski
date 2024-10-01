@@ -7,7 +7,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 dotenv_path = BASE_DIR / '.env'
 load_dotenv(dotenv_path)
-
+import django_heroku
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
@@ -58,11 +58,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'sklep.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -89,7 +85,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     str(BASE_DIR / 'static')
 ]
@@ -109,7 +105,7 @@ STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
-
+django_heroku.settings(locals())
 import logging
 import logging.config
 
