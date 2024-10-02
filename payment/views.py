@@ -14,7 +14,10 @@ import uuid
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import logging
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+@login_required
 def add_user_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST)
@@ -30,7 +33,7 @@ def add_user_profile(request):
     return render(request, 'add_user_profile.html', {'form': form})
 
 
-class UserProfileListView(ListView):
+class UserProfileListView(LoginRequiredMixin,ListView):
     model = UserProfile
     template_name = 'user_profile_list.html'
     context_object_name = 'profiles'
@@ -38,18 +41,18 @@ class UserProfileListView(ListView):
     def get_queryset(self):
         return UserProfile.objects.filter(user=self.request.user)
 
-class UserProfileDetailView(DetailView):
+class UserProfileDetailView(LoginRequiredMixin,DetailView):
     model = UserProfile
     template_name = 'user_profile_detail.html'
     context_object_name = 'profile'
 
-class UserProfileUpdateView(UpdateView):
+class UserProfileUpdateView(LoginRequiredMixin,UpdateView):
     model = UserProfile
     form_class = UserProfileForm
     template_name = 'user_profile_update.html'
     success_url = reverse_lazy('profile-list')
 
-class UserProfileDeleteView(DeleteView):
+class UserProfileDeleteView(LoginRequiredMixin,DeleteView):
     model = UserProfile
     template_name = 'user_profile_delete.html'
     success_url = reverse_lazy('profile-list')
@@ -57,8 +60,8 @@ class UserProfileDeleteView(DeleteView):
 import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 
+@login_required
 def order_summary(request):
     cart = Cart(request)
     cart_products = cart.get_prods
@@ -78,6 +81,7 @@ def order_summary(request):
 
     return render(request, "order_summary.html", context)
 
+@login_required
 def create_checkout_session(request):
     order_number = str(uuid.uuid4())[:8]
     cart = Cart(request)
@@ -138,10 +142,10 @@ def create_checkout_session(request):
     return redirect(session.url, code=303)
 
 
-class PaymentSucces(TemplateView):
+class PaymentSucces(LoginRequiredMixin,TemplateView):
     template_name = "payment_succes.html"
 
-class PaymentCancel(TemplateView):
+class PaymentCancel(LoginRequiredMixin,TemplateView):
     template_name = "payment_cancel.html"
 
 logger = logging.getLogger(__name__)
@@ -200,6 +204,7 @@ def stripe_webhook(request):
     # Zwracanie odpowiedzi 200 OK
     return HttpResponse(status=200)
 
+@login_required
 def order_history(request):
     user = request.user
     orders = Order.objects.filter(user=user).order_by('-created_at')  # Zamówienia posortowane od najnowszych

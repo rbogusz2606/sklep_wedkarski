@@ -1,8 +1,9 @@
 from .cart import Cart
 from django.shortcuts import render, get_object_or_404
 from app.models import Product
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+@login_required
 def cart_summary(request):
     cart = Cart(request)
     cart_products = cart.get_prods
@@ -15,6 +16,8 @@ def cart_summary(request):
         "totals": totals,
     }
     return render(request, "cart_summary.html", context)
+
+@login_required
 def cart_add(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":
@@ -41,6 +44,7 @@ def cart_add(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@login_required
 def cart_update(request):
     cart = Cart(request)
     if request.method == "POST":
@@ -72,6 +76,7 @@ def cart_update(request):
 
     return JsonResponse({"error": "Nieprawidłowe żądanie."}, status=400)
 
+@login_required
 def cart_remove(request):
     cart = Cart(request)
     if request.method == 'POST':

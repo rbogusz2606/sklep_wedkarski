@@ -7,21 +7,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+@login_required
 def view(request):
     return render(request, "docs/home.html")
 
+@login_required
 def Rods_view(request):
     product_instance = Category.objects.get(id=1)
     rods_filter = Product.objects.filter(category=product_instance)
     return render(request, 'docs/all_rods.html', {'rods_filter': rods_filter})
 
+@login_required
 def Rells_view(request):
     product_instance = Category.objects.get(id=2)
     rells_filter = Product.objects.filter(category=product_instance)
     return render(request, 'docs/all_rells.html', {'rells_filter': rells_filter})
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin,DetailView):
     model = Product
     template_name = 'docs/product_detail.html'
     context_object_name = 'product'
@@ -40,6 +45,7 @@ def register(request):
         form = UserRegistration()
     
     return render(request, 'docs/sign_up.html', {'form': form})
+
 @csrf_exempt
 def loginView(request):
     if request.method == 'POST':
@@ -61,6 +67,7 @@ def loginView(request):
 
     return render(request, 'docs/login.html', {'form': form})
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('login')

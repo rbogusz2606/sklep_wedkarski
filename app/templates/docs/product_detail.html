@@ -17,7 +17,7 @@
                 <li><img src="{{ product.img.url }}" alt="{{ product.name }}" class="img-fluid w-50"></li>
                 <li><h2>Nazwa produktu:</h2>{{product.name}}</li>
                 <li><h2>Opis produktu:</h2> {{product.description}} </li>
-                <li>Cena: {{product.price}} zł</li>
+                <li><h2>Cena:</h2> <h3>{{product.price}} zł</h3></li>
                 <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
                 <input type="hidden" name="action" value="post">
                 {% if user.is_authenticated %}

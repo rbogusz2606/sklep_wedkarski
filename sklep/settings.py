@@ -9,7 +9,7 @@ dotenv_path = BASE_DIR / '.env'
 load_dotenv(dotenv_path)
 import django_heroku
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'https://sklep-wedkarski.onrender.com', 'http://127.0.0.1:8000']
 
@@ -117,36 +117,6 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 django_heroku.settings(locals())
-import logging
-import logging.config
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[{asctime}] {levelname} [{name}] {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',  # Ustaw na DEBUG dla bardziej szczegółowych logów
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'debug.log',  # Ścieżka do pliku logów
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'app.storage': {  # Dodaj logowanie dla Twojego backendu storage
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+LOGIN_URL = '/login/'
+
