@@ -153,6 +153,9 @@ logger = logging.getLogger(__name__)
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 class StripeWebhookView(View):
     def post(self, request, *args, **kwargs):
         payload = request.body
