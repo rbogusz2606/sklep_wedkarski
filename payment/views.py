@@ -11,11 +11,11 @@ from .models import UserProfile, Order
 from django.views.generic import TemplateView
 from django.urls import reverse
 import uuid
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.http import JsonResponse
 import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 
 @login_required
 def add_user_profile(request):
@@ -150,59 +150,40 @@ class PaymentCancel(LoginRequiredMixin,TemplateView):
 
 logger = logging.getLogger(__name__)
 
-@csrf_exempt
-def stripe_webhook(request):
-    # Pobieranie payloadu i nagłówka podpisu
-    payload = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
 
-    if not sig_header:
-        logger.error("Brak nagłówka podpisu Stripe")
-        return HttpResponse(status=400)
-
-    # Weryfikacja podpisu i konstrukcja eventu
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        logger.error(f"Nieprawidłowy payload: {e}")
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        logger.error(f"Nieprawidłowy podpis Stripe: {e}")
-        return HttpResponse(status=400)
-
-    # Obsługa eventu 'checkout.session.completed'
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-
-        # Pobieranie danych z metadata
-        metadata = session.get('metadata', {})
-        order_number = metadata.get('order_number')
-        user_id = metadata.get('user_id')
-
-        if not order_number or not user_id:
-            logger.error("Brak 'order_number' lub 'user_id' w metadata")
-            return HttpResponse(status=400)
+stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+class StripeWebhookView(View):
+    def post(self, request, *args, **kwargs):
+        payload = request.body
+        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+        event = None
 
         try:
-            # Pobieranie zamówienia na podstawie order_number i user_id
-            order = Order.objects.get(order_number=order_number, user_id=user_id)
-            # Aktualizacja statusu płatności
-            order.payment_status = 'paid'
-            order.save()
-            logger.info(f"Zamówienie {order_number} zostało zaktualizowane jako opłacone")
-        except Order.DoesNotExist:
-            logger.error(f"Zamówienie o numerze {order_number} nie istnieje")
-            return HttpResponse(status=400)
-        except Exception as e:
-            logger.error(f"Błąd podczas aktualizacji zamówienia: {e}")
-            return HttpResponse(status=500)
-    else:
-        logger.warning(f"Nieobsługiwany typ eventu: {event['type']}")
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, endpoint_secret
+            )
+        except ValueError:
+            # Niepoprawny ładunek
+            return JsonResponse({'status': 'invalid payload'}, status=400)
+        except stripe.error.SignatureVerificationError:
+            # Niepoprawna sygnatura
+            return JsonResponse({'status': 'invalid signature'}, status=400)
 
-    # Zwracanie odpowiedzi 200 OK
-    return HttpResponse(status=200)
+        # Obsługa zdarzeń
+        if event['type'] == 'payment_intent.succeeded':
+            payment_intent = event['data']['object']
+            handle_successful_payment(payment_intent)  # Obsługa sukcesu płatności
+
+        return JsonResponse({'status': 'success'})
+
+def handle_successful_payment(payment_intent):
+    try:
+        order = Order.objects.get(stripe_payment_intent=payment_intent['id'])
+        order.status = 'zapłacone'
+        order.save()
+    except:
+        pass
 
 @login_required
 def order_history(request):

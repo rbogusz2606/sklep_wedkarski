@@ -13,7 +13,7 @@ urlpatterns = [
     path('create-checkout-session/', views.create_checkout_session, name='create_checkout_session'),
     path('succes/', views.PaymentSucces.as_view(), name='payment-success'),
     path('cancel/', views.PaymentCancel.as_view(), name='payment-cancel'),
-    path('webhook-stripe/', views.stripe_webhook, name='webhook-stripe'),
+    path('webhook-stripe/', views.StripeWebhookView.as_view(), name='webhook-stripe'),
     path('order-history/', views.order_history, name='order-history'),
 ]
 if settings.DEBUG:
