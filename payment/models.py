@@ -24,6 +24,7 @@ class Order(models.Model):
     order_number = models.CharField(max_length=100, unique=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES)
+    stripe_payment_intent = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
