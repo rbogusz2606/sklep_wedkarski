@@ -9,7 +9,7 @@ dotenv_path = BASE_DIR / '.env'
 load_dotenv(dotenv_path)
 import django_heroku
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'https://sklep-wedkarski.onrender.com', 'http://127.0.0.1:8000']
 
