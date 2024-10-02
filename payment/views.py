@@ -150,42 +150,44 @@ class PaymentCancel(LoginRequiredMixin,TemplateView):
 
 logger = logging.getLogger(__name__)
 
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET  
 
-@csrf_exempt
+@method_decorator(csrf_exempt, name='dispatch')
 class StripeWebhookView(View):
     def post(self, request, *args, **kwargs):
         payload = request.body
-        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
         try:
             event = stripe.Webhook.construct_event(
                 payload, sig_header, endpoint_secret
             )
-        except ValueError:
+        except ValueError as e:
             # Niepoprawny ładunek
             return JsonResponse({'status': 'invalid payload'}, status=400)
-        except stripe.error.SignatureVerificationError:
+        except stripe.error.SignatureVerificationError as e:
             # Niepoprawna sygnatura
             return JsonResponse({'status': 'invalid signature'}, status=400)
 
         # Obsługa zdarzeń
         if event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            handle_successful_payment(payment_intent)  # Obsługa sukcesu płatności
+            handle_successful_payment(payment_intent)
 
         return JsonResponse({'status': 'success'})
 
 def handle_successful_payment(payment_intent):
     try:
+        # Znajdź zamówienie na podstawie identyfikatora PaymentIntent
         order = Order.objects.get(stripe_payment_intent=payment_intent['id'])
-        order.status = 'zapłacone'
+        order.payment_status = 'paid'  # Zaktualizuj status na 'zapłacone'
         order.save()
-    except:
+    except Order.DoesNotExist:
+        # Obsłuż przypadek, gdy zamówienie nie istnieje
         pass
 
 @login_required
