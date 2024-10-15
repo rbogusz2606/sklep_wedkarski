@@ -200,3 +200,8 @@
     background-color: #1e7e34; /* Jeszcze ciemniejszy zielony przy kliknięciu */
     transform: translateY(0); /* Resetowanie efektu podniesienia przy kliknięciu */
 }
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
